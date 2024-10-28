@@ -1,0 +1,464 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<meta charset="UTF-8" /> 
+     <title>OFRENDA ICM</title>
+     
+     <link rel="icon" type="image/png" href="./images/calaverita_favicon.png">
+     <style>
+     </style>
+</head>
+<body>
+<canvas id="myCanvas">
+    <!--El elemento HTML canvas se puede utilizar para dibujar gráficos a través de 
+        secuencias de comandos (por lo general JavaScript ).-->
+</canvas>
+<script type="importmap"> 
+    {
+        "imports":{
+            "three": "./js/three.module.js",
+            "three/OrbitControls": "./js/OrbitControls.js" 
+        }
+}
+</script>
+<script type="module"> 
+
+    import{RoundedBoxGeometry}from "./js/RoundedBoxGeometry.js";
+    
+    //👉🏽 Mandar llamar a la librería
+
+    import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
+    import { OrbitControls } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/OrbitControls.js";
+
+    import tequilaa from"./js/Tequila.js"
+    import Molito from"./js/mole.js"
+    import Pan from"./js/Pan.js"
+    import ESC04 from"./js/Agua.js"
+    import ESC06 from"./js/Vela.js"
+    import ESC07 from"./js/Craneo.js"
+    import ESC08 from"./js/Calavera.js"
+    import Cocab from"./js/CocaCola.js"
+    import Florecitas from"./js/flores.js"
+    import Cigarros from "./js/cajetilla.js"
+    import ArcoFlores from"./js/arcoflores.js"
+    import velasg from"./js/velasgrupo.js"
+    import sombrerito from"./js/sombrero.js"
+    import caliz from"./js/caliz.js"
+    import tamales from"./js/tamales.js"
+    import marco1 from"./js/Marco.js"
+    import cantarito from"./js/cantarito.js"
+    import TODOYA from"./js/ataud.js"
+    import tumba1 from"./js/tumbapata.js"
+    import Molcajetes from"./js/molcajetes.js"
+    import tumba2 from"./js/tumba2.js"
+    import marco2 from "./js/Marco2.js"
+    import fantasmita from "./js/fantasmita.js"
+
+    //👉🏽 Renderer - Realiza una conexión entre el código y el canvas
+    var renderer = new THREE.WebGLRenderer({canvas: document.getElementById('myCanvas'),antialias: true});
+    renderer.setPixelRatio(window.decivePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x85929E);
+
+    //🎬 Creando nueva escena 
+    var scene = new THREE.Scene();
+    //scene.fog = new THREE.FogExp2( 0x7d3fba, 0.01 );
+    
+
+    //🎥 Agregar una cámara de perspectiva
+    var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 5000);
+    scene.add(camera);
+
+    const sizes = {
+        width: window.innerWidth,
+        height: window.innerHeight
+    };
+
+    const canvas = document.getElementById('myCanvas');
+
+    window.addEventListener('resize',() =>{
+        sizes.width = window.innerWidth;
+        sizes.height = window.innerHeight;
+
+        camera.aspect = sizes.width / sizes.height;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(sizes.width, sizes.height);
+    })
+
+    //👉🏽Settings de la cámara
+    camera.position.set(0, 10, 50);
+
+    //👉🏽Añadiendo los OrbitControls
+    var controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+    // Ajustar la velocidad de rotación y zoom
+    controls.rotateSpeed = 0.1; // Disminuir para un movimiento más lento
+    controls.zoomSpeed = 0.5; // Disminuir para un zoom más lento
+ 
+    controls.maxPolarAngle = Math.PI / 2.1; // Limitar la rotación vertical
+    controls.minPolarAngle = 0; // Limitar la rotación vertical
+
+    // Limitar el zoom
+    controls.maxDistance = 600; // Ajusta este valor según tus necesidades
+    controls.minDistance = 10; // Opcional: Limitar el zoom hacia adentro
+
+
+    //✏️GridHelper
+    const gridHelper = new THREE.GridHelper(50,10);
+    //scene.add (gridHelper);
+
+    //✏️Ejes
+    const axesHelper = new THREE.AxesHelper(50);
+    //scene.add (axesHelper);
+  
+
+    // 🪄🪄 SECCIÓN DE CÓDIGO 🪄🪄
+
+  
+   
+    var loader=new THREE.TextureLoader();
+    var bgTexture= loader.load ("./images/fondoof3.png");
+    scene.background= bgTexture;
+
+    
+
+    //PLANO
+    var cube=new RoundedBoxGeometry(100,0.5,110,10,0.5);
+    var texture= new THREE.TextureLoader().load("./images/tierra.jpg"); 
+  var material= new THREE.MeshToonMaterial({
+     map:texture,
+     side: THREE.DoubleSide
+   });
+     var mesh=new THREE.Mesh(cube,material);
+     scene.add(mesh);
+     mesh.position.set(0,-3,0);
+     mesh.receiveShadow = true; 
+     
+     function crearPoste(x, z) {
+    var posteGeometry = new THREE.CylinderGeometry(1, 1, 10 ,30,30);
+    var posteMaterial = new THREE.MeshToonMaterial({ color: 0x8B4513 });
+    var poste = new THREE.Mesh(posteGeometry, posteMaterial);
+    poste.position.set(x, 2, z);
+    scene.add(poste);
+}
+
+for (var i = -50; i <= 50; i += 7) {
+    crearPoste(i, -55);  
+    crearPoste(i, 55);  
+}
+
+for (var j = -55; j <= 55; j += 10) {
+    crearPoste(-50, j);  
+    crearPoste(50, j);   
+}
+
+const base = new THREE.CylinderGeometry(25, 25, 6, 35);
+var texture = new THREE.TextureLoader().load("./images/piedra.jpg", (tex) => {
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(1, 0.3); 
+});
+var material1 = new THREE.MeshToonMaterial({
+    map: texture,
+    side: THREE.DoubleSide
+});
+const baseofrenda = new THREE.Mesh(base, material1);
+baseofrenda.position.set(0, 0, -22);
+scene.add(baseofrenda);
+
+     const medio = new THREE.CylinderGeometry( 17.5, 17.5, 6, 35 );
+     var material0=new THREE.MeshToonMaterial({color:0x9e265e}); 
+     const midofrenda = new THREE.Mesh( medio, material1 ); //
+     midofrenda.position.set(0,6,-22);
+     scene.add( midofrenda );
+     const top = new THREE.CylinderGeometry( 9, 9, 5, 35 ); 
+     var material=new THREE.MeshToonMaterial({color:0x9e4a26}); 
+     const topofrenda = new THREE.Mesh( top, material1 ); 
+     topofrenda.position.set(0,11,-22);
+     scene.add( topofrenda );
+
+
+//ALFOMBRA
+const vertices = new Float32Array([
+    -25, 0, 35, 
+    25, 0, 35, 
+    -13, 0, -30, 
+    13, 0, -30,  
+      
+]);
+const indices = new Uint16Array([
+    0, 2, 1, 
+    1, 2, 3  
+]);
+
+const geometry = new THREE.BufferGeometry();
+geometry.setIndex(new THREE.BufferAttribute(indices, 1));
+geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+
+
+const material2 = new THREE.MeshLambertMaterial( { color: 0xff6619, side: THREE.DoubleSide } );
+const alfombra = new THREE.Mesh(geometry, material2);
+scene.add(alfombra);
+alfombra.position.set(0, -2.5, 20);
+
+     
+     //LUCES
+     
+     var alight=new THREE.AmbientLight(0xffffff,0.3);
+     alight.position.set(60,60,60);
+     scene.add(alight);
+
+     var dlight=new THREE.DirectionalLight(0xf6afce,0.5); 
+     dlight.position.set(0,10,10); 
+     dlight.target.position.set(0,0,0);
+     scene.add(dlight);
+
+     //SOMBRA
+     renderer.shadowMap.enabled=true;
+     renderer.shadowMap.type=THREE.PCFShadowMap;
+
+     //SPOTLIGHT
+
+var slight01 = new THREE.SpotLight(0xb85923, 1.8, 20, 0.9, 1, 0);
+var helperf= new THREE.SpotLightHelper(slight01);
+    //scene.add(helperf);
+scene.add(slight01);
+slight01.position.set(0, 60, -30);
+var targetObject = new THREE.Object3D();
+targetObject.position.set(0, 0, 0); 
+scene.add(targetObject);
+slight01.target = targetObject;
+slight01.castShadow = true;
+slight01.shadow.bias = 0.001;
+
+
+//ELEMENTOS
+
+    var esqueleto=ESC08({x:0,y:0,z:0});
+    scene.add(esqueleto);
+    esqueleto.position.set(0,27,-25);
+    esqueleto.scale.set(1.3,1.3,1.3);
+    var sombrero=sombrerito({x:0,y:0,z:0});
+    scene.add(sombrero);
+    sombrero.position.set(0,31,-25);
+    sombrero.scale.set(1.5,1.5,1.5);
+
+    var fantasmita1=fantasmita({x:0,y:0,z:0});
+    scene.add(fantasmita1);
+    fantasmita1.position.set(-30,5,1);
+    fantasmita1.scale.set(0.5,0.5,0.5);
+
+
+
+    var Mole=Molito({x:0,y:0,z:0});
+    scene.add(Mole);
+    Mole.position.set(-4,5.9,-5);
+    Mole.scale.set(0.5,0.37,0.5);
+    var Mole2=Mole.clone();
+    scene.add(Mole2); 
+    Mole2.position.set(5,11.7,-31); 
+    Mole2.rotation.y=1; 
+
+    var Pan1=Pan({x:0,y:0,z:0});
+    scene.add(Pan1);
+    Pan1.position.set(-8,9.5,-32);
+    Pan1.scale.set(0.5,0.5,0.5);
+    var Pan2= Pan1.clone();
+    scene.add(Pan2);
+    Pan2.position.set(-14,4,-5);
+    var Pan3= Pan1.clone();
+    scene.add(Pan3);
+    Pan3.position.set(-12,4,-5);
+    Pan3.rotation.z=-.7;
+
+    var calizin=caliz({x:0,y:0,z:0});
+    scene.add(calizin);
+    calizin.position.set(0,14,-17);
+    calizin.scale.set(0.9,0.9,0.9); 
+    var calizin1=calizin.clone();
+    //scene.add(calizin1); 
+    calizin1.position.set(-4,14,-17);
+    calizin1.rotation.y=1; 
+
+    var Tequilita=tequilaa({x:0,y:0,z:0});
+    scene.add(Tequilita);
+    Tequilita.position.set(9,11.5,-14);
+    Tequilita.scale.set(0.7,0.7,0.7);
+    var Tequilita2= Tequilita.clone();
+    scene.add(Tequilita2);
+    Tequilita2.position.set(-17,5.5,-9);
+    Tequilita2.rotation.y=2;
+    var Tequilita3= Tequilita.clone();
+    scene.add(Tequilita3);
+    Tequilita3.position.set(-3,5.5,-43);
+
+    var molcajete=Molcajetes({x:0,y:0,z:0});
+    scene.add(molcajete);
+    molcajete.position.set(-22,6.3,-26); 
+    molcajete.scale.set(0.7,0.7,0.7);
+    molcajete.rotation.y=1.8; 
+    var molcajete2=molcajete.clone();
+    scene.add(molcajete2);
+    molcajete2.position.set(10,11,-11) 
+    molcajete2.rotation.y=-0.9;
+    
+    var cantarito0=cantarito({x:0,y:0,z:0});
+    scene.add(cantarito0);
+    cantarito0.scale.set(0.5,0.5,0.5);
+    cantarito0.position.set(15,4.3,-36); 
+    var cantarito1=cantarito0.clone();
+    scene.add(cantarito1);
+    cantarito1.position.set(14,4.3,-5);
+    var cantarito2=cantarito0.clone();
+    scene.add(cantarito2);
+    cantarito2.position.set(-6 ,10.5,-35);
+    cantarito2.rotation.y=.5;
+
+    var Cajetilla=Cigarros({x:0,y:0,z:0});
+    scene.add(Cajetilla);
+    Cajetilla.position.set(-7,8.6,-11);
+    Cajetilla.scale.set(0.3,0.3,0.3);
+    Cajetilla.rotation.z=-1.5;
+
+    var Tamales=tamales({x:0,y:0,z:0});
+    scene.add(Tamales);
+    Tamales.scale.set(0.5,0.5,0.5);
+    Tamales.position.set(21, 4.7, -19);
+    var Tamales1=Tamales.clone();
+    scene.add(Tamales1);
+    Tamales1.position.set(-12, 10.5, -18);
+    Tamales1.rotation.y=3;
+    var Tamales2=Tamales.clone();
+    scene.add(Tamales2);
+    Tamales2.position.set(2, 4.7, -44);
+    Tamales2.rotation.y=3;
+
+    var cocacola=Cocab({x:0,y:0,z:0});
+    scene.add(cocacola);
+    cocacola.scale.set(0.6,0.6,0.6);
+    cocacola.position.set(-5,9.8,-11);
+    var cocacola2=cocacola.clone();
+    scene.add(cocacola2);
+    cocacola2.position.set(-17,3.7,-26);
+    cocacola2.rotation.y=-1;
+    var cocacola3=cocacola.clone();
+    scene.add(cocacola3);
+    cocacola3.position.set(-1,3.7,-42); 
+    cocacola3.rotation.y=-1;
+
+    var Agua=ESC04({x:0,y:0,z:0});
+    scene.add(Agua);
+    Agua.scale.set(0.8,0.7,0.8);
+    Agua.position.set(-3,11,-9);
+    var Agua1=Agua.clone();
+    scene.add(Agua1)
+    Agua1.scale.set(0.8,0.7,0.8);
+    Agua1.position.set(16,5,-24);
+
+    var calaquita=ESC07({x:0,y:0,z:0});
+    scene.add(calaquita);
+    calaquita.scale.set(0.3,0.3,0.4); 
+    calaquita.position.set(1,3,1);
+    calaquita.rotation.y=-.4;
+    var calaquita2=calaquita.clone();
+    scene.add(calaquita2);
+    calaquita2.position.set(3,9,-8);
+    calaquita2.rotation.y=.6;
+    var calaquita3=calaquita.clone();
+    scene.add(calaquita3);
+    calaquita3.position.set(6,9,-35);
+    calaquita3.scale.set(0.5,0.5,0.6);
+    calaquita3.rotation.y=2.2;
+    var calaquita4=calaquita.clone();
+    scene.add(calaquita4);
+    calaquita4.position.set(10 ,3,-1);
+    calaquita4.scale.set(0.5,0.5,0.6);
+    calaquita4.rotation.y=.3;
+    
+    
+    var foto=marco1({x:0,y:0,z:0});
+    scene.add(foto);
+    foto.scale.set(0.8,0.7,0.8); 
+    foto.position.set(1,5.5,-3.5);
+
+    var foto2=marco2({x:0,y:0,z:0});
+    scene.add(foto2);
+    foto2.scale.set(0.8,0.7,0.8); 
+    foto2.position.set(-4,11.6,-12.5);
+    foto2.rotation.x=-.2; 
+
+
+    var Tumbap=tumba1({x:0,y:0,z:0});
+    scene.add(Tumbap);
+    Tumbap.position.set(40,3,18)
+
+    var Tumbap1=Tumbap.clone();
+    scene.add(Tumbap1); 
+    Tumbap1.position.set(-30,3,1)
+
+
+    var Tumbaa=tumba2({x:0,y:0,z:0});
+    scene.add(Tumbaa);
+    Tumbaa.position.set(-40,3,18); 
+
+    var Tumbaa2=Tumbaa.clone(); 
+    scene.add(Tumbaa2);
+    Tumbaa2.position.set(30,3,37); 
+
+
+    var ataud=TODOYA({x:0,y:0,z:0});
+    scene.add(ataud);
+    ataud.position.set(-28,3,37); 
+
+    var ataud2=ataud.clone(); 
+    scene.add(ataud2);
+    ataud2.position.set(30,3,2); 
+       
+
+    var Arquito=ArcoFlores({x:0,y:0,z:0});
+    scene.add(Arquito);
+    Arquito.position.set(0,0,0);
+
+    var Arquito1=ArcoFlores({x:0,y:0,z:0});
+    scene.add(Arquito1);
+    Arquito1.position.set(0,-14,-21);
+    Arquito1.scale.set(0.64,0.5,0.7);
+    Arquito1.rotation.x=1.6;
+    var Arquito2=ArcoFlores({x:0,y:0,z:0});
+    scene.add(Arquito2);
+    Arquito2.position.set(0,16,-23);
+    Arquito2.scale.set(0.64,0.5,0.7);
+    Arquito2.rotation.x=-1.6;
+     
+
+    //VELAS
+    var velasaltar=velasg({x:0,y:0,z:0});
+    scene.add(velasaltar);
+
+
+
+    
+
+      //🎰🎰Rendering y animación
+      requestAnimationFrame(render);
+      function render() {
+
+
+
+      //🪄🪄 Animación
+      
+      
+
+
+      controls.update();
+
+      //Llamado para renderizar y volver a llamar a la misma función (render)
+      renderer.render(scene, camera);
+      requestAnimationFrame(render);
+      }
+</script>
+</body>
+</html>
